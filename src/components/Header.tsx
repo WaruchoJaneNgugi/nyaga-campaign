@@ -114,6 +114,64 @@ export default function Header() {
         }
     ];
 
+    // Navigation links component that works for both desktop and mobile
+    const NavigationLinks = ({ isMobile = false }: { isMobile?: boolean }) => (
+        <>
+            <nav className={`${isMobile ? '' : 'space-y-2'}`}>
+                {navItems.map((item) => (
+                    <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => isMobile ? handleLinkClick(item.name) : setActiveTab(item.name)}
+                        className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 group border-2 ${
+                            activeTab === item.name
+                                ? 'bg-blue-50 border-blue-200 shadow-lg'
+                                : 'border-transparent hover:border-blue-200 hover:bg-blue-50'
+                        } ${isMobile ? '' : 'hover:scale-105 hover:shadow-lg'}`}
+                    >
+                        <div className={`p-2 rounded-xl transition-all duration-300 ${
+                            activeTab === item.name
+                                ? 'bg-blue-500 text-white shadow-lg'
+                                : 'bg-slate-100 text-slate-600 group-hover:bg-blue-500 group-hover:text-white'
+                        }`}>
+                            {item.icon}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <div className={`font-semibold transition-colors truncate ${
+                                activeTab === item.name ? 'text-blue-600' : 'text-slate-800 group-hover:text-blue-600'
+                            }`}>
+                                {item.name}
+                            </div>
+                            <div className="text-sm text-slate-500 group-hover:text-slate-600 truncate">
+                                {item.description}
+                            </div>
+                        </div>
+                        <span className={`text-slate-400 transition-all duration-300 transform group-hover:translate-x-1 flex-shrink-0 ${
+                            activeTab === item.name ? 'text-blue-500' : 'group-hover:text-blue-500'
+                        }`}>
+                            →
+                        </span>
+                    </Link>
+                ))}
+            </nav>
+
+            {/* Action Buttons */}
+            <div className={`${isMobile ? '' : 'space-y-3 border-t border-slate-200 pt-6'}`}>
+                {actionItems.map((item) => (
+                    <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => isMobile ? handleLinkClick(item.name) : setActiveTab(item.name)}
+                        className={`flex items-center justify-center gap-3 p-4 rounded-2xl font-semibold text-white transition-all duration-300 transform hover:scale-105 hover:shadow-2xl ${item.color} ${item.bgColor}`}
+                    >
+                        <span className="text-lg">{item.icon}</span>
+                        <span>{item.name}</span>
+                    </Link>
+                ))}
+            </div>
+        </>
+    );
+
     return (
         <>
             <header className={`fixed w-full top-0 left-0 z-50 transition-all duration-500 ${
@@ -136,11 +194,6 @@ export default function Header() {
                                 <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
                             </div>
                             <div className="flex flex-col">
-                                {/*<span className={`text-lg sm:text-xl font-bold transition-colors duration-300 ${*/}
-                                {/*    scrolled ? 'text-blue-600 group-hover:text-blue-700' : 'text-white group-hover:text-yellow-200'*/}
-                                {/*}`}>*/}
-                                {/*    JM Nyaga*/}
-                                {/*</span>*/}
                                 <span className={`text-xs transition-colors duration-300 ${
                                     scrolled ? 'text-slate-600' : 'text-blue-200'
                                 }`}>
@@ -149,64 +202,23 @@ export default function Header() {
                             </div>
                         </Link>
 
-                        {/* Desktop Navigation - IMPROVED VISIBLE TABS */}
-                        <nav className="hidden lg:flex items-center space-x-1">
-                            {navItems.map((item) => (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    onClick={() => setActiveTab(item.name)}
-                                    className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-semibold transition-all duration-300 relative group ${
-                                        activeTab === item.name
-                                            ? 'bg-white/50 text-blue-600 shadow-2xl shadow-blue-500/30 transform scale-105'
-                                            : scrolled
-                                                ? 'text-black hover:text-blue-600  hover:shadow-lg'
-                                                : 'text-black hover:text-blue-600  hover:shadow-2xl'
-                                    }`}
-                                >
-                                    {/* Background for non-scrolled state */}
-                                    {!scrolled && activeTab !== item.name && (
-                                        <div className="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-2xl group-hover:bg-white group-hover:backdrop-blur-0 transition-all duration-300"></div>
-                                    )}
-
-                                    <div className={`transition-transform duration-300 relative z-10 ${
-                                        activeTab === item.name
-                                            ? 'scale-110 text-blue-600'
-                                            : 'text- grblackoucurrentp-hover:scale-110'
-                                    }`}>
-                                        {item.icon}
-                                    </div>
-                                    <span className="whitespace-nowrap relative z-10">{item.name}</span>
-
-                                    {/* Active indicator */}
-                                    {activeTab === item.name && (
-                                        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-6 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-                                    )}
-
-                                    {/* Hover gradient border */}
-                                    <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10`}></div>
-                                    <div className="absolute inset-[2px] rounded-2xl bg-white -z-10"></div>
-                                </Link>
-                            ))}
-                        </nav>
-
-                        {/* Desktop Action Buttons */}
-                        <div className="hidden lg:flex items-center space-x-3">
-                            {actionItems.map((item) => (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    className={`group relative px-6 py-3 rounded-2xl font-bold bg-orange-500 text-white transition-all duration-300 transform hover:scale-105 hover:shadow-2xl ${item.color} shadow-lg`}
-                                >
-                                    <div className="flex items-center gap-2 relative z-10">
-                                        <span className="text-lg transition-transform duration-300 group-hover:scale-110">
-                                            {item.icon}
-                                        </span>
-                                        <span>{item.name}</span>
-                                    </div>
-                                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </Link>
-                            ))}
+                        {/* Desktop Menu Button */}
+                        <div className="hidden lg:flex items-center space-x-4">
+                            {/* Simple Desktop Menu Button */}
+                            <button
+                                onClick={() => setIsOpen(!isOpen)}
+                                className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-semibold transition-all duration-300 ${
+                                    scrolled
+                                        ? 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg'
+                                        : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 hover:shadow-lg'
+                                }`}
+                                aria-label="Toggle menu"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                                <span>Menu</span>
+                            </button>
                         </div>
 
                         {/* Mobile Menu Button */}
@@ -235,10 +247,98 @@ export default function Header() {
                 </div>
             </header>
 
-            {/* Side Menu Overlay */}
+            {/* Desktop Side Menu (Right Side) */}
+            <div className={`hidden lg:block fixed inset-0 z-40 transition-all duration-500 ease-in-out ${
+                isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
+            }`}>
+                {/* Backdrop - only for desktop when menu is open */}
+                <div
+                    className={`absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-500 ${
+                        isOpen ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                ></div>
+
+                {/* Side Menu Panel - Right Side */}
+                <div className={`
+                    absolute top-0 right-0 h-full w-80 xl:w-96 max-w-full bg-white shadow-2xl
+                    transform transition-transform duration-500 ease-in-out
+                    ${isOpen ? 'translate-x-0' : 'translate-x-full'}
+                    flex flex-col border-l border-slate-200
+                `}>
+                    {/* Header Section - Fixed */}
+                    <div className="p-6 border-b border-slate-200 bg-gradient-to-r from-blue-900 to-purple-900 text-white flex-shrink-0">
+                        <div className="flex items-center justify-between mb-6">
+                            <Link
+                                href="/"
+                                className="flex items-center space-x-3 group"
+                                onClick={() => {
+                                    setActiveTab("Home");
+                                    setIsOpen(false);
+                                }}
+                            >
+                                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-2xl flex items-center justify-center shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+                                    <span className="text-white font-bold text-lg">JM</span>
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-lg font-bold text-white">JM Nyaga</span>
+                                    <span className="text-sm text-blue-200">Tharaka Constituency</span>
+                                </div>
+                            </Link>
+
+                            {/* Close Button for Desktop */}
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors duration-200"
+                                aria-label="Close menu"
+                            >
+                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        {/* Contact Info */}
+                        <div className="space-y-2 text-sm text-blue-200">
+                            <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                    </svg>
+                                </div>
+                                <span>07XX XXX XXX</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </div>
+                                <span>Tharaka Constituency</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Scrollable Content Area */}
+                    <div className="flex-1 overflow-y-auto p-6">
+                        <NavigationLinks />
+
+                        {/* Footer Section */}
+                        <div className="mt-6 pt-6 border-t border-slate-200">
+                            <div className="text-center text-sm text-slate-600">
+                                <p className="font-semibold text-slate-800">For the People, With the People</p>
+                                <p className="text-xs mt-2">© {new Date().getFullYear()} JM Nyaga</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile Side Menu Overlay */}
             <div className={`
-                fixed inset-0 z-50 transition-all duration-500 ease-in-out
-                ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}
+                fixed inset-0 z-40 transition-all duration-500 ease-in-out lg:hidden
+                ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}
             `}>
                 {/* Backdrop */}
                 <div
@@ -307,63 +407,11 @@ export default function Header() {
                     </div>
 
                     {/* Scrollable Content Area */}
-                    <div className="flex-1 overflow-y-auto">
-                        {/* Navigation Links */}
-                        <nav className="p-6 space-y-2">
-                            {navItems.map((item) => (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    onClick={() => handleLinkClick(item.name)}
-                                    className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 group border-2 ${
-                                        activeTab === item.name
-                                            ? 'bg-blue-50 border-blue-200 shadow-lg'
-                                            : 'border-transparent hover:border-blue-200 hover:bg-blue-50'
-                                    }`}
-                                >
-                                    <div className={`p-2 rounded-xl transition-all duration-300 ${
-                                        activeTab === item.name
-                                            ? 'bg-blue-500 text-white shadow-lg'
-                                            : 'bg-slate-100 text-slate-600 group-hover:bg-blue-500 group-hover:text-white'
-                                    }`}>
-                                        {item.icon}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className={`font-semibold transition-colors truncate ${
-                                            activeTab === item.name ? 'text-blue-600' : 'text-slate-800 group-hover:text-blue-600'
-                                        }`}>
-                                            {item.name}
-                                        </div>
-                                        <div className="text-sm text-slate-500 group-hover:text-slate-600 truncate">
-                                            {item.description}
-                                        </div>
-                                    </div>
-                                    <span className={`text-slate-400 transition-all duration-300 transform group-hover:translate-x-1 flex-shrink-0 ${
-                                        activeTab === item.name ? 'text-blue-500' : 'group-hover:text-blue-500'
-                                    }`}>
-                                        →
-                                    </span>
-                                </Link>
-                            ))}
-                        </nav>
-
-                        {/* Action Buttons */}
-                        <div className="p-6 border-t border-slate-200 space-y-3">
-                            {actionItems.map((item) => (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    onClick={() => handleLinkClick(item.name)}
-                                    className={`flex items-center justify-center gap-3 p-4 rounded-2xl font-semibold text-white transition-all duration-300 transform hover:scale-105 hover:shadow-2xl ${item.color} ${item.bgColor}`}
-                                >
-                                    <span className="text-lg">{item.icon}</span>
-                                    <span>{item.name}</span>
-                                </Link>
-                            ))}
-                        </div>
+                    <div className="flex-1 overflow-y-auto p-6">
+                        <NavigationLinks isMobile={true} />
 
                         {/* Footer Section */}
-                        <div className="p-6 border-t border-slate-200 bg-slate-50">
+                        <div className="mt-6 pt-6 border-t border-slate-200">
                             <div className="text-center text-sm text-slate-600">
                                 <p className="font-semibold text-slate-800">For the People, With the People</p>
                                 <p className="text-xs mt-2">© {new Date().getFullYear()} JM Nyaga</p>
@@ -373,10 +421,15 @@ export default function Header() {
                 </div>
             </div>
 
-            {/* Prevent body scroll when menu is open */}
+            {/* Prevent body scroll when menu is open (mobile only) */}
             <style jsx global>{`
                 body {
                     overflow: ${isOpen ? 'hidden' : 'auto'};
+                }
+                @media (min-width: 1024px) {
+                    body {
+                        overflow: auto !important;
+                    }
                 }
             `}</style>
         </>
