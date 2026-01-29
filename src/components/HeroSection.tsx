@@ -11,7 +11,7 @@ export default function HeroSection() {
     const missionSlides = [
         {
             id: 1,
-            content: "Ending poverty through strategic planning, fighting handouts, and building sustainable prosperity in Tharaka.",
+            content: "Ending poverty through work, strategic planning, collaborations fighting handouts, and building sustainable prosperity in Tharaka.",
             emphasis: ["strategic planning", "fighting handouts", "sustainable prosperity"]
         },
         {
