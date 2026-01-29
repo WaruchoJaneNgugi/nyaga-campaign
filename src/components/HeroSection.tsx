@@ -98,7 +98,7 @@ export default function HeroSection() {
                                     transition={{duration: 0.8, delay: 0.4}}
                                     className="text-lg sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-white tracking-wide max-w-4xl mx-auto leading-relaxed"
                                 >
-                                    Ending Poverty Through Planning & Collaboration
+                                    Ending Poverty Through Work, Strategic Planning & Collaboration
                                 </motion.h2>
                             </div>
 
